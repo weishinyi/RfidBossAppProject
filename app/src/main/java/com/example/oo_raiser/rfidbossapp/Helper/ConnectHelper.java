@@ -8,16 +8,19 @@ import android.util.Log;
 
 import com.example.oo_raiser.rfidbossapp.R;
 
+import org.json.JSONObject;
+
 import java.io.BufferedReader;
-import java.io.IOException;
+import java.io.BufferedWriter;
 import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
 
 public class ConnectHelper {
 
-    private String TAG = Resources.getSystem().getString(R.string.app_TAG);
+    private String TAG = Util.APPTAG;
 
     private final ConnectivityManager connManger;
     private NetworkInfo info;
@@ -42,7 +45,7 @@ public class ConnectHelper {
     /** get/post function */
 
     //get GET Connection
-    public HttpURLConnection getGetConnection(String urlStr)
+    private HttpURLConnection getGetConnection(String urlStr)
     {
         connection = null;
         info = connManger.getActiveNetworkInfo();
@@ -69,7 +72,7 @@ public class ConnectHelper {
     }
 
     //get Post Connection
-    public HttpURLConnection getPostConnection(String urlStr)
+    private HttpURLConnection getPostConnection(String urlStr)
     {
         connection = null;
         info = connManger.getActiveNetworkInfo();
@@ -96,7 +99,6 @@ public class ConnectHelper {
 
         return  connection;
     }
-
 
     //get string data from webApi with GET Request
     public String RequestWebApiGet(String urlStr)
@@ -132,7 +134,6 @@ public class ConnectHelper {
                 connection.disconnect();
             }
 
-
         }else{
             dataStr = Util.WIFI_CONNECTFAIL;
         }
@@ -140,7 +141,7 @@ public class ConnectHelper {
         return dataStr;
     }
 
-    public String RequestWebApiPost(String urlStr)
+    public String RequestWebApiPost(String urlStr, JSONObject... jsonObjects)
     {
         String dataStr = null;
         info = connManger.getActiveNetworkInfo();
@@ -152,15 +153,30 @@ public class ConnectHelper {
                 //get connect
                 connection = getPostConnection(urlStr);
 
-                //read data
-                BufferedReader bf = new BufferedReader(new InputStreamReader(connection.getInputStream(),"UTF-8"));
-                StringBuffer buffer = new StringBuffer();
-                String s = null;
-                while((s = bf.readLine()) != null)
+                if(connection!=null)
                 {
-                    buffer.append(s);
+                    //write data to server
+                    if(jsonObjects!=null)
+                    {
+                        //write data
+                        BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(connection.getOutputStream(), "UTF-8"));
+                        bw.write(jsonObjects[0].toString());
+                        bw.flush();
+                        bw.close();
+                    }
+
+                    //read data
+                    BufferedReader bf = new BufferedReader(new InputStreamReader(connection.getInputStream(),"UTF-8"));
+                    StringBuffer buffer = new StringBuffer();
+                    String s = null;
+                    while((s = bf.readLine()) != null)
+                    {
+                        buffer.append(s);
+                    }
+                    dataStr = buffer.toString();
+                }else{
+                    dataStr = Util.SERVER_CONNENTFAIL;
                 }
-                dataStr = buffer.toString();
 
             }catch (Exception e){
                 dataStr = Util.SERVER_CONNENTFAIL;
@@ -169,13 +185,11 @@ public class ConnectHelper {
                 connection.disconnect();
             }
 
-
         }else{
             dataStr = Util.WIFI_CONNECTFAIL;
         }
 
         return dataStr;
-
     }
 
 

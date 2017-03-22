@@ -3,11 +3,12 @@ package com.example.oo_raiser.rfidbossapp.Helper;
 
 public class Util {
 
+    public final static String APPTAG = "RfidBoss";
+
     public final static String LOADING = "請稍後...";
     public final static String WAITING = "等待中...";
 
     public final static String ERROR = "錯誤";
-
 
     public final static String WIFI_CONNECTFAIL = "網路連線失敗...";
     public final static String SERVER_CONNENTFAIL = "伺服器連線失敗...";
@@ -27,16 +28,8 @@ public class Util {
     public final static String CONTENTWEB = "text/html; charset=UTF-8";
 
     //web api url
+    public final static String QueryRecode = "http://...";
     public final static String TodoyNewsUrl = "http://10.10.28.204:39643/api/TodayNews/";
-    public final static String NewsDetailUrl = "http://10.10.28.204:39643/api/NewsDetail/";
-    public final static String GetReplyListUrl = "http://10.10.28.204:39643/api/TodolistReply/";
-    public final static String NewReplyUrl = "http://10.10.28.204:39643/api/TodolistReply";
-    public final static String UserLoginTokenUrl = "http://10.10.28.204:39574/token";
-
-    public final static String DashboardIndexUrl="http://10.10.28.204:39643/api/Dashboard/Index/"; //加上一個任意數字
-    public final static String DashboardChargeIndexUrl = "http://10.10.28.204:39643/api/Dashboard/ChargeIndex/"; //加上一個任意數字
-    public final static String DashboardAssignIndexUrl = "http://10.10.28.204:39643/api/Dashboard/AssignIndex/"; //加上一個任意數字
-    public final static String ToDoListToDoUrl = "http://10.10.28.204:39643/api/ToDo/"; //加上一個任意數字
 
     //token
     static public String statusCode(int Code) {
